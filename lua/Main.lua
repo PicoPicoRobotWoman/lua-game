@@ -1,12 +1,8 @@
-os.execute("clear")
+local gc = require("lua.game.gameController")
 
 function main()
 
-
-   --=[[
-    local gc = require("lua.game.gameController")
     gc.start()
-    --]]--
 
 end
 

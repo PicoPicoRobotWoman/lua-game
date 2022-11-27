@@ -1,6 +1,8 @@
+local copyist = require("lua.lib.copyist")
+
 local mi = {}
 
-function mi.lines3Exist(maxtix)
+function mi.lines3Exist(matrix)
     
     for r = 2, #matrix - 1, 1 do
 
@@ -21,12 +23,12 @@ function mi.lines3Exist(maxtix)
     return false
 end
 
-function mi.search(matrix, element)
+function mi.search(matrix, predicate)
 
     for r = 1, #matrix, 1 do
         
         for c = 1, #matrix[r], 1 do
-            if matrix[r][c] == element then return true end
+            if predicate(matrix[r][c]) then return true end
         end
     end
 

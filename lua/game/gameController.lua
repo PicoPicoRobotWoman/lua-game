@@ -14,14 +14,19 @@ function gc.start()
     while gm.getStatus() ~= "end" do
 
         if gm.getStatus() == "wait" then
+
             local comand = gi.input()
             gm.tick(comand)
+
         else 
+
             gm.tick()
+
         end
 
         area = gm.dump()
         gr.render(area)
+        print(gm.getStatus())
                 
     end
     gr.endGame()

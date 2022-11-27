@@ -1,5 +1,5 @@
 local copyist = require("lua.lib.copyist")
-local mc = require("lua.lib.matrixConstructor") 
+local mtrx = require("lua.lib.matrix") 
 local mi = require("lua.lib.matrixInfo")
 local sc = require("lua.lib.syntaxCorrect")
 local gf = require("lua.game.Gem")
@@ -7,17 +7,17 @@ local sleep = require("lua.lib.sleep")
 
 local rows = 10
 local collums = 10
-local timeout = 1
+local timeout = 0.5
 local area = {}
 local status = "wait"
-local empty = "0"
 
-local actvaters = {
+local actionsBefore = {
 
     [1] = {
         predicate = function(gem)
             return gem.type == "usual"
         end,
+
         action = function(area, row, col)
             -- ignore
         end
@@ -25,12 +25,11 @@ local actvaters = {
 
 }
 
-
-local createSpecials = {
+local actionsAfter = {
 
     [1] = {
         predicate = function(gem)
-            return gem.color == gf.getEmptyColor()
+            return gem.type == "empty"
         end,
         action = function(area, row, col)
             -- ignore
@@ -43,10 +42,8 @@ local gm = {}
 
 function gm.init()
     
-    -- Инициализация Area и его первоночальное заполнение
-    area = mc.getEmptyMatrix(rows, collums, gf.getEmptyGem)
-    
-    mc.mix(area, gf.createGem)
+    area = mtrx.createMatrix(rows, collums, gf.getEmptyGem)    
+    mtrx.mix(area, gf.createGem)
   
 end
 
@@ -54,16 +51,21 @@ function gm.tick(comand)
 
     if status == "wait" then
 
-        if comand == "mix" then mc.mix(area, gf.createGem) end
+        if comand == "mix" then mtrx.mix(area, gf.createGem) end
         if comand == "q" then status = "end" end
 
         if sc.moveisCorrect(comand) then 
 
             gm.move(comand)
+            print(mi.lines3Exist(area))
             if mi.lines3Exist(area) then
+
                 status = "running"
+                
             else
+
                 gm.move(comand)
+
             end            
 
         end
@@ -72,19 +74,27 @@ function gm.tick(comand)
 
     if status == "running" then 
         
-        if mi.search(area, gf.getEmptyGem()) then
-            
-        elseif mi.lines3Exist() then
+        if mi.search(area, gf.isEmpty) then
 
-            mc.convert(area, actvaters)
-            area = mc.convert3lines(area, gf.convertToEmpty)
-            mc.convert(area, createSpecials)
+            mtrx.falling(area, gf.isEmpty, gf.createGem)
+
+        elseif mi.lines3Exist(area) then
+
+            mtrx.convert(area, actionsBefore)
+            area = mtrx.convert3lines(area, gf.convertToEmpty)
+            mtrx.convert(area, actionsAfter)
             
-        else 
+        else
             status = "wait"
         end
-        --print("Ждём")
-        --sleep(timeout)
+        
+        --[[ if not (mi.search(area, gf.isEmpty) and mi.lines3Exist(area)) then
+
+            status = "wait"
+
+        end ]]--
+
+        sleep(timeout)
 
     end
 
@@ -102,7 +112,7 @@ function gm.move(comand)
     c2 = direction == "l" and c1 - 1 or (direction == "r" and c1 + 1 or c1) 
 
     if (allowedValues[r2]) and (allowedValues[c2]) then
-        mc.swap(area, r1, c1, r2, c2)
+        mtrx.swap(area, r1, c1, r2, c2)
     end
 
 end
