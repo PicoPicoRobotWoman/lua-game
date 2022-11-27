@@ -29,7 +29,7 @@ local actionsAfter = {
 
     [1] = {
         predicate = function(gem)
-            return gem.type == "empty"
+            return gf.isEmpty(gem)
         end,
         action = function(area, row, col)
             -- ignore
@@ -42,23 +42,23 @@ local gm = {}
 
 function gm.init()
     
-    area = mtrx.createMatrix(rows, collums, gf.getEmptyGem)    
-    mtrx.mix(area, gf.createGem)
-  
+    area = mtrx.createMatrix(rows, collums, function() return "" end)   
+    mtrx.mix(area, gf.createGem, function(gem1, gem2) return gem1.color == gem2.color end) 
+
 end
 
 function gm.tick(comand)
 
     if status == "wait" then
 
-        if comand == "mix" then mtrx.mix(area, gf.createGem) end
+        if comand == "mix" then mtrx.mix(area, gf.createGem, function(gem1, gem2) return gem1.color == gem2.color end) end
         if comand == "q" then status = "end" end
 
         if sc.moveisCorrect(comand) then 
 
             gm.move(comand)
-            print(mi.lines3Exist(area))
-            if mi.lines3Exist(area) then
+            
+            if mi.lines3Exist(area, function(gem1, gem2) return gem1.color == gem2.color end) then
 
                 status = "running"
                 
@@ -78,26 +78,20 @@ function gm.tick(comand)
 
             mtrx.falling(area, gf.isEmpty, gf.createGem)
 
-        elseif mi.lines3Exist(area) then
+        elseif mi.lines3Exist(area, function(gem1, gem2) return gem1.color == gem2.color end) then
 
             mtrx.convert(area, actionsBefore)
-            area = mtrx.convert3lines(area, gf.convertToEmpty)
+            area = mtrx.convert3lines(area, gf.convertToEmpty, function(gem1, gem2) return gem1.color == gem2.color end)
             mtrx.convert(area, actionsAfter)
             
         else
             status = "wait"
         end
         
-        --[[ if not (mi.search(area, gf.isEmpty) and mi.lines3Exist(area)) then
-
-            status = "wait"
-
-        end ]]--
-
         sleep(timeout)
 
     end
-
+    
 end
 
 function gm.move(comand) 

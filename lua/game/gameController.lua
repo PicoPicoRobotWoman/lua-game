@@ -26,7 +26,6 @@ function gc.start()
 
         area = gm.dump()
         gr.render(area)
-        print(gm.getStatus())
                 
     end
     gr.endGame()

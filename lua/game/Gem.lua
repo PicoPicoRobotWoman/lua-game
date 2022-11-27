@@ -1,7 +1,6 @@
 local gf = {}
 
-local allowedColors = {"A", "B", "C", "D"}
---local allowedColors = {"A", "B", "C", "D", "E", "F"}
+local allowedColors = {"A", "B", "C", "D", "E", "F"}
 local emptyColor = "0"
 local emptyType = "empty"
 
@@ -21,19 +20,6 @@ function gf.createGem(type, color)
     return gem
 end
 
-function gf.getEmptyGem()
-
-    local gem = {
-
-        type = emptyType,
-        color = emptyColor
-
-    }
-    setmetatable(gem, metatable)
-    return gem
-
-end
-
 function gf.getEmptyColor()
     return emptyColor
 end
@@ -42,12 +28,11 @@ function gf.getEmptyType()
     return emptyType
 end
 
-function gf.convertToEmpty(SRCgem)
-    local gem = {
-        type = emptyType,
-        color = emptyColor
-    }
-    return gem
+function gf.convertToEmpty(gem)
+
+    gem.type = emptyType
+    gem.color = emptyColor
+
 end
 
 function gf.isEmpty(gem)

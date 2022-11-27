@@ -19,7 +19,7 @@ function mtrx.createMatrix(rows, collums, generator)
     return matrix
 end
 
-function mtrx.mix(matrix, generator)
+function mtrx.mix(matrix, generator, binaryPredicate)
 
     repeat
 
@@ -31,7 +31,7 @@ function mtrx.mix(matrix, generator)
     
         end
 
-    until not mi.lines3Exist(matrix)
+    until not mi.lines3Exist(matrix, binaryPredicate)
 
 end
 
@@ -39,18 +39,18 @@ function mtrx.swap(matrix, r1, c1, r2, c2)
     matrix[r1][c1], matrix[r2][c2] = matrix[r2][c2], matrix[r1][c1]
 end
 
-function mtrx.convert3lines(matrix, convert) 
+function mtrx.convert3lines(matrix, convert, binaryPredicate) 
     
     local virtualmatrix = copyist.deepCopy(matrix)
 
     for r = 2, #matrix - 1, 1 do
 
         for c = 1, #matrix[r], 1 do
-            if matrix[r - 1][c] == matrix[r][c] and matrix[r][c] == matrix[r + 1][c] then 
+            if binaryPredicate(matrix[r - 1][c], matrix[r][c]) and binaryPredicate(matrix[r][c], matrix[r + 1][c]) then 
 
-                virtualmatrix[r - 1][c] = convert(matrix[r - 1][c])
-                virtualmatrix[r][c] = convert(matrix[r][c])
-                virtualmatrix[r + 1][c] = convert(matrix[r + 1][c])
+                convert(virtualmatrix[r - 1][c])
+                convert(virtualmatrix[r][c])
+                convert(virtualmatrix[r + 1][c])
 
             end
         end
@@ -60,11 +60,11 @@ function mtrx.convert3lines(matrix, convert)
     for r = 1, #matrix, 1 do
 
         for c = 2, #matrix[r] - 1, 1 do
-            if matrix[r][c - 1] == matrix[r][c] and matrix[r][c] == matrix[r][c + 1] then
+            if binaryPredicate(matrix[r][c - 1], matrix[r][c]) and binaryPredicate(matrix[r][c], matrix[r][c + 1]) then
 
-                virtualmatrix[r][c - 1] = convert(matrix[r][c - 1])
-                virtualmatrix[r][c] = convert(matrix[r][c])
-                virtualmatrix[r][c + 1] = convert(matrix[r][c + 1])
+                convert(virtualmatrix[r][c - 1])
+                convert(virtualmatrix[r][c])
+                convert(virtualmatrix[r][c + 1])
 
             end
         end
@@ -111,7 +111,6 @@ function mtrx.falling(matrix, predicate, generator)
         end
         
     end
-
 
 end
 
