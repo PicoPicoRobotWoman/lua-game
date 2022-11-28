@@ -24,11 +24,11 @@ function matrixs.mix(matrix, generator)
     repeat
 
         for r = 1, #matrix, 1 do
-
             for c = 1, #matrix[r] do
+
                 matrix[r][c] = generator()
+                
             end
-    
         end
 
     until not matrixInfo.lines3Exist(matrix) and matrixs.lookForPossibles(matrix) 
@@ -40,7 +40,7 @@ function matrixs.swap(matrix, from, to)
 end
 
 function matrixs.convert3lines(matrix, convert) 
-    
+
     local virtualmatrix = deepCopy(matrix)
 
     for r = 2, #matrix - 1, 1 do
