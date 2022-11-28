@@ -21,14 +21,14 @@ function gameRender.render(board)
         C = "\27[43mC \27[0m",
         D = "\27[44mD \27[0m",
         E = "\27[45mE \27[0m",
-        F = "\27[47mF \27[0m"        
+        F = "\27[47mF \27[0m"
     }
 
     for r = 1, #board, 1 do
 
         local line = r - 1 .. "|"
         for c = 1, #board[r], 1 do
-            line = line .. paint[board[r][c].color]
+            line = line .. paint[board[r][c].color] 
         end
         print(line)
 

@@ -114,60 +114,28 @@ function matrixs.falling(matrix, predicate, generator)
 
 end
 
-function matrixs.lookForPossibles (mtrx)
+function matrixs.lookForPossibles(matrix)
 
-    local virtualmatrix = deepCopy(mtrx)
+    local virtualmatrix = deepCopy(matrix)
+
+    local function try_swap(r, c, dr, dc)
+        local from = {row = r, col = c}
+        local to = {row = r+dr, col = c+dc}
+        matrixs.swap(virtualmatrix, from, to)
+        if matrixInfo.lines3Exist(virtualmatrix) then
+            return true
+        else
+            matrixs.swap(virtualmatrix, from, to)
+        end
+    end
     
-    for r = 2, #mtrx -1, 1 do 
-        for c = 2, #mtrx[r] - 1, 1 do
-
-            local points = { {0, 1}, {0, -1}, {1, 0}, {-1, 0} }
- 
-            for i, nums in ipairs(points) do
-                matrixs.swap(virtualmatrix, {row = r, col = c}, {row = r + nums[1], col = c + nums[2]})
-                if matrixInfo.lines3Exist(virtualmatrix) then
-                    return true
-                else
-                    matrixs.swap(virtualmatrix, {row = r, col = c}, {row = r + nums[1], col = c + nums[2]})
-                end
-            end
+    for r = 1, #matrix -1, 1 do 
+        for c = 1, #matrix[r] - 1, 1 do
+            if try_swap(r, c, 0, 1) or try_swap(r, c, 1, 0) then return true end
         end
     end
 
-    for r = 1, #mtrx, #mtrx - 1 do
-        for c = 2, #mtrx[r] - 1, 1 do
-
-            local points = { {0, 1}, {0, -1}}
-                                                                   
-            for i, nums in ipairs(points) do
-                matrixs.swap(virtualmatrix, {row = r, col = c}, {row = r + nums[1], col = c + nums[2]})
-                if matrixInfo.lines3Exist(virtualmatrix) then
-                    return true
-                else
-                    matrixs.swap(virtualmatrix, {row = r, col = c}, {row = r + nums[1], col = c + nums[2]})
-                end
-            end           
-
-        end
-    end
-
-    for r = 1, #mtrx - 1, 1 do
-        for c = 1, #mtrx[r], #matrixs[r] - 1 do
-
-            local points = {{1, 0}, {-1, 0}}
-                                                                   
-            for i, nums in ipairs(points) do
-                matrixs.swap(virtualmatrix, {row = r, col = c}, {row = r + nums[1], col = c + nums[2]})
-                if matrixInfo.lines3Exist(virtualmatrix) then
-                    return true
-                else
-                    matrixs.swap(virtualmatrix, {row = r, col = c}, {row = r + nums[1], col = c + nums[2]})
-                end
-            end         
-
-        end
-    end
-
+    return false
 end
 
 return matrixs
