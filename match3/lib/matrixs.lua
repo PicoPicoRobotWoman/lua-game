@@ -76,16 +76,16 @@ function matrixs.convert3lines(matrix, convert)
 end
 
 function matrixs.apply(matrix, converters)
-    
+
     for i = 1, #converters, 1 do 
 
         for  r = 1, #matrix, 1 do
-            for c = 1, #matrix[r], 1 do    
-                
+            for c = 1, #matrix[r], 1 do
+
                 if converters[i].predicate(matrix[r][c]) then
-                    converters[i].action(matrix, r, c) 
+                    converters[i].action(matrix, r, c)
                 end
-                
+
             end
         end
     end
@@ -95,21 +95,21 @@ end
 function matrixs.falling(matrix, predicate, generator)    
 
     for c = #matrix[1], 1, -1 do
-        
+
         for r = 2, #matrix, 1 do
-            
+
             if predicate(matrix[r][c]) then
 
-                matrix[r][c] , matrix[r - 1][c] = matrix[r - 1][c] , matrix[r][c]        
+                matrix[r][c] , matrix[r - 1][c] = matrix[r - 1][c], matrix[r][c]        
 
             end
 
         end
 
-        if predicate(matrix[1][c]) then 
+        if predicate(matrix[1][c]) then
             matrix[1][c] = generator()
         end
-        
+
     end
 
 end
@@ -128,9 +128,9 @@ function matrixs.lookForPossibles(matrix)
             matrixs.swap(virtualmatrix, from, to)
         end
     end
-    
-    for r = 1, #matrix -1, 1 do 
-        for c = 1, #matrix[r] - 1, 1 do
+
+    for r = 1, #matrix, 1 do 
+        for c = 1, #matrix[r] , 1 do
             if try_swap(r, c, 0, 1) or try_swap(r, c, 1, 0) then return true end
         end
     end
