@@ -1,7 +1,7 @@
 local sleep = require("match3.lib.sleep")
 local clear = require("match3.lib.clear")
 
-local timeout = 3
+local timeout = 0.7
 
 local gameRender = {}
 
