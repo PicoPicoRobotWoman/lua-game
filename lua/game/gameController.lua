@@ -3,29 +3,31 @@ local gameInit = require("lua.game.gameInput")
 local gameRender = require("lua.game.gameRender")
 
 local gameController = {}
+local running = true
 
 function gameController.start()
     
     gameModel.init()
-    local area = gameModel.dump()
-    gameRender.render(area)
+    local board = gameModel.dump()
+    gameRender.render(board)
 
-    while gameModel.getStatus() ~= "end" do
+    while running do
 
-        if gameModel.getStatus() == "wait" then
+        if not gameModel.isRunning() then
 
-            local comand = gameInit.input()
-            gameModel.tick(comand)
+            local answer = gameInit.input()
 
-        else 
-
-            gameModel.tick()
-
+            if answer.comand == "mix" then gameModel.mix() end
+            if answer.comand == "q" then running = false end
+            if answer.comand == "move" then gameModel.move(answer.from, answer.to) end
+            
         end
-
-        area = gameModel.dump()
-        gameRender.render(area)
-                
+        
+        gameModel.tick()
+        
+        board = gameModel.dump()
+        gameRender.render(board)        
+        
     end
     gameRender.endGame()
 

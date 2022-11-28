@@ -2,7 +2,7 @@ local gameController = require("lua.game.gameController")
 
 function main()
 
-    gameController.start()
+   gameController.start()
 
 end
 
