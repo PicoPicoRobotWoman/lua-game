@@ -29,8 +29,7 @@ function gameController.start()
         if gameModel.lookForPossibles() then gameModel.mix() end
         
         local board = gameModel.dump()
-        gameRender.render(board)        
-        
+        gameRender.render(board)
     end
     gameRender.endGame()
 

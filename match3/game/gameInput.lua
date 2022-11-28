@@ -53,6 +53,8 @@ function gameInput.input()
 
         end
 
+        print("> is not correct" )
+
     end
 
 end

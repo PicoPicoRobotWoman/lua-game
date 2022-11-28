@@ -77,8 +77,7 @@ end
 
 function matrixs.apply(matrix, converters)
 
-    for i = 1, #converters, 1 do 
-
+    for i = 1, #converters, 1 do
         for  r = 1, #matrix, 1 do
             for c = 1, #matrix[r], 1 do
 
@@ -119,18 +118,23 @@ function matrixs.lookForPossibles(matrix)
     local virtualmatrix = deepCopy(matrix)
 
     local function try_swap(r, c, dr, dc)
+
         local from = {row = r, col = c}
-        local to = {row = r+dr, col = c+dc}
+        local to = {row = r + dr, col = c + dc}
+
         matrixs.swap(virtualmatrix, from, to)
+        
         if matrixInfo.lines3Exist(virtualmatrix) then
             return true
         else
             matrixs.swap(virtualmatrix, from, to)
+            return false
         end
+        
     end
 
     for r = 1, #matrix, 1 do 
-        for c = 1, #matrix[r] , 1 do
+        for c = 1, #matrix[r], 1 do
             if try_swap(r, c, 0, 1) or try_swap(r, c, 1, 0) then return true end
         end
     end

@@ -91,10 +91,8 @@ function gameModel.move(from, to)
 end
 
 ---- позволяет узнать есть ли возможные ходы ----
-function gameModel.lookForPossibles() 
-
-    matrixs.lookForPossibles(board)
-
+function gameModel.lookForPossibles()
+    return matrixs.lookForPossibles(board)
 end
 
 
