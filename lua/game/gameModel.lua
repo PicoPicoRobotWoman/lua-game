@@ -1,4 +1,4 @@
-local copyist = require("lua.lib.copyist")
+local deepCopy = require("lua.lib.deepCopy")
 local matrix = require("lua.lib.matrix") 
 local matrixInfo = require("lua.lib.matrixInfo")
 
@@ -17,7 +17,7 @@ local actionsBefore = {
         end,
 
         action = function(board, row, col)
-            -- ignore
+            -- code
         end
     }
 
@@ -30,7 +30,7 @@ local actionsAfter = {
             return gemMaker.isEmpty(gem)
         end,
         action = function(board, row, col)
-            -- ignore
+            -- code
         end
     }
 
@@ -41,7 +41,7 @@ local gameModel = {}
 function gameModel.init()
     
     board = matrix.createMatrix(rows, collums, function() return "" end)   
-    matrix.mix(board, gemMaker.createGem, function(gem1, gem2) return gem1.color == gem2.color end) 
+    matrix.mix(board, gemMaker.createGem) 
 
 end
 
@@ -52,11 +52,11 @@ function gameModel.tick(comand)
 
         matrix.falling(board, gemMaker.isEmpty, gemMaker.createGem)
 
-    elseif matrixInfo.lines3Exist(board, function(gem1, gem2) return gem1.color == gem2.color end) then
+    elseif matrixInfo.lines3Exist(board) then
 
-        matrix.convert(board, actionsBefore)
-        board = matrix.convert3lines(board, gemMaker.convertToEmpty, function(gem1, gem2) return gem1.color == gem2.color end)
-        matrix.convert(board, actionsAfter)
+        matrix.apply(board, actionsBefore)
+        board = matrix.convert3lines(board, gemMaker.convertToEmpty)
+        matrix.apply(board, actionsAfter)
             
     else
         running = false
@@ -66,13 +66,13 @@ function gameModel.tick(comand)
 end
 
 function gameModel.mix()
-    matrix.mix(board, gemMaker.createGem, function(gem1, gem2) return gem1.color == gem2.color end) 
+    matrix.mix(board, gemMaker.createGem) 
 end
 
 function gameModel.move(from, to) 
 
     matrix.swap(board, from, to)
-    if matrixInfo.lines3Exist(board, function(gem1, gem2) return gem1.color == gem2.color end) then 
+    if matrixInfo.lines3Exist(board) then 
         running = true
     else 
         matrix.swap(board, from, to)
@@ -80,8 +80,14 @@ function gameModel.move(from, to)
 
 end
 
+function gameModel.hint()
+        
+
+
+end
+
 function gameModel.dump()
-    return copyist.deepCopy(board)
+    return deepCopy(board)
 end
 
 function gameModel.isRunning()

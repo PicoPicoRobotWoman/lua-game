@@ -34,7 +34,7 @@ function gameInput.input()
             local answer = {}
             answer.comand = "move"
 
-            tokens = split(line, " ")
+            local tokens = split(line, " ")
 
             answer.from = {
                 row = tonumber(tokens[2]) + 1,
@@ -51,11 +51,6 @@ function gameInput.input()
             end
 
         end
-
-        local answer = {}
-        answer.comand = "scip"
-
-        return answer
 
     end
 

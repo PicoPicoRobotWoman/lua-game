@@ -1,13 +1,11 @@
-local copyist = require("lua.lib.copyist")
-
 local matrixInfo = {}
 
-function matrixInfo.lines3Exist(matrix, binaryPredicate)
+function matrixInfo.lines3Exist(matrix)
     
     for r = 2, #matrix - 1, 1 do
 
         for c = 1, #matrix[r], 1 do
-            if binaryPredicate(matrix[r - 1][c], matrix[r][c]) and binaryPredicate(matrix[r][c], matrix[r + 1][c]) then return true end
+            if matrix[r - 1][c] == matrix[r][c] and matrix[r][c] == matrix[r + 1][c] then return true end
         end
 
     end
@@ -15,7 +13,7 @@ function matrixInfo.lines3Exist(matrix, binaryPredicate)
     for r = 1, #matrix, 1 do
 
         for c = 2, #matrix[r] - 1, 1 do
-            if binaryPredicate(matrix[r][c - 1], matrix[r][c]) and binaryPredicate(matrix[r][c], matrix[r][c + 1]) then return true end
+            if matrix[r][c - 1] == matrix[r][c] and matrix[r][c] == matrix[r][c + 1] then return true end
         end
 
     end

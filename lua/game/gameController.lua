@@ -25,7 +25,7 @@ function gameController.start()
         
         gameModel.tick()
         
-        board = gameModel.dump()
+        local board = gameModel.dump()
         gameRender.render(board)        
         
     end

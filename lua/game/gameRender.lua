@@ -34,5 +34,18 @@ function gameRender.endGame()
     print("The End" )
 end
 
+function gameRender.renderWithHint(board, hint)
+
+    local oldTimeout = timeout
+    timeout = 0
+
+    gameRender.render(board)
+    print("m " .. hint.from.row .. " " .. hint.from.col)
+    print("> enter")
+    io.read()
+
+    timeout = oldTimeout
+    
+end
 
 return gameRender
