@@ -1,3 +1,6 @@
+local deepCopy = require("match3.lib.deepCopy")
+
+---- модуль, позваляющий узнать информацию о матрице ----
 local matrixInfo = {}
 
 function matrixInfo.lines3Exist(matrix)
@@ -28,6 +31,7 @@ function matrixInfo.search(matrix, predicate)
         for c = 1, #matrix[r], 1 do
             if predicate(matrix[r][c]) then return true end
         end
+
     end
 
     return false

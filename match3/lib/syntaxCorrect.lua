@@ -1,6 +1,7 @@
-local split = require("lua.lib.split")
+local split = require("match3.lib.split")
 local syntaxCorrect = {}
 
+---- модуль для проверки синтаксиса ----
 function syntaxCorrect.moveIsCorrect(comand)
 
     local allowedSymbols = {l = true, u = true, d = true, r = true}

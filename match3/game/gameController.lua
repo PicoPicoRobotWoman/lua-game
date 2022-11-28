@@ -1,10 +1,12 @@
-local gameModel = require("lua.game.gameModel")
-local gameInit = require("lua.game.gameInput")
-local gameRender = require("lua.game.gameRender")
+local gameModel = require("match3.game.gameModel")
+local gameInit = require("match3.game.gameInput")
+local gameRender = require("match3.game.gameRender")
 
 local gameController = {}
 local running = true
 
+
+--- модуль, управляющим "жизненым циклом" игры
 function gameController.start()
     
     gameModel.init()
@@ -24,6 +26,7 @@ function gameController.start()
         end
         
         gameModel.tick()
+        if gameModel.lookForPossibles() then gameModel.mix() end
         
         local board = gameModel.dump()
         gameRender.render(board)        

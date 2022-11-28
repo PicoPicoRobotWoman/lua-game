@@ -1,9 +1,10 @@
-local syntaxCorrect = require("lua.lib.syntaxCorrect")
+local syntaxCorrect = require("match3.lib.syntaxCorrect")
 
-local split = require("lua.lib.split")
+local split = require("match3.lib.split")
 
 local gameInput = {}
 
+---- модуль для считывания команд и их валидации вводимых параметров ----
 function gameInput.input()
 
     while true do

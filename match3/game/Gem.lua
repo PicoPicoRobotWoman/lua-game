@@ -5,6 +5,8 @@ local emptyColor = "0"
 local emptyType = "empty"
 
 local metatable = {}
+
+--- модуль для управления гемами ----
 function metatable.__eq(g1, g2)
     return g1.color == g2.color
 end
