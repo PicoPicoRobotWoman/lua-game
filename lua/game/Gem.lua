@@ -1,4 +1,4 @@
-local gf = {}
+local gemMaker = {}
 
 local allowedColors = {"A", "B", "C", "D", "E", "F"}
 local emptyColor = "0"
@@ -9,7 +9,7 @@ function metatable.__eq(g1, g2)
     return g1.color == g2.color
 end
 
-function gf.createGem(type, color) 
+function gemMaker.createGem(type, color) 
     local gem = {
 
         type = type or "usual",
@@ -20,24 +20,24 @@ function gf.createGem(type, color)
     return gem
 end
 
-function gf.getEmptyColor()
+function gemMaker.getEmptyColor()
     return emptyColor
 end
 
-function gf.getEmptyType()
+function gemMaker.getEmptyType()
     return emptyType
 end
 
-function gf.convertToEmpty(gem)
+function gemMaker.convertToEmpty(gem)
 
     gem.type = emptyType
     gem.color = emptyColor
 
 end
 
-function gf.isEmpty(gem)
+function gemMaker.isEmpty(gem)
     return gem.type == emptyType
 end
 
 
-return gf
+return gemMaker

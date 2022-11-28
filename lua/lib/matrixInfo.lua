@@ -1,8 +1,8 @@
 local copyist = require("lua.lib.copyist")
 
-local mi = {}
+local matrixInfo = {}
 
-function mi.lines3Exist(matrix, binaryPredicate)
+function matrixInfo.lines3Exist(matrix, binaryPredicate)
     
     for r = 2, #matrix - 1, 1 do
 
@@ -23,7 +23,7 @@ function mi.lines3Exist(matrix, binaryPredicate)
     return false
 end
 
-function mi.search(matrix, predicate)
+function matrixInfo.search(matrix, predicate)
 
     for r = 1, #matrix, 1 do
         
@@ -35,4 +35,4 @@ function mi.search(matrix, predicate)
     return false
 end
 
-return mi
+return matrixInfo

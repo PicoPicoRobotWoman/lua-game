@@ -1,15 +1,13 @@
 local copyist = require("lua.lib.copyist")
-local mtrx = require("lua.lib.matrix") 
-local mi = require("lua.lib.matrixInfo")
-local sc = require("lua.lib.syntaxCorrect")
-local gf = require("lua.game.Gem")
-local sleep = require("lua.lib.sleep")
+local matrix = require("lua.lib.matrix") 
+local matrixInfo = require("lua.lib.matrixInfo")
+
+local gemMaker = require("lua.game.Gem")
 
 local rows = 10
 local collums = 10
-local timeout = 0.5
-local area = {}
-local status = "wait"
+local board = {}
+local running = false
 
 local actionsBefore = {
 
@@ -18,7 +16,7 @@ local actionsBefore = {
             return gem.type == "usual"
         end,
 
-        action = function(area, row, col)
+        action = function(board, row, col)
             -- ignore
         end
     }
@@ -29,94 +27,65 @@ local actionsAfter = {
 
     [1] = {
         predicate = function(gem)
-            return gf.isEmpty(gem)
+            return gemMaker.isEmpty(gem)
         end,
-        action = function(area, row, col)
+        action = function(board, row, col)
             -- ignore
         end
     }
 
 }
 
-local gm = {}
+local gameModel = {}
 
-function gm.init()
+function gameModel.init()
     
-    area = mtrx.createMatrix(rows, collums, function() return "" end)   
-    mtrx.mix(area, gf.createGem, function(gem1, gem2) return gem1.color == gem2.color end) 
+    board = matrix.createMatrix(rows, collums, function() return "" end)   
+    matrix.mix(board, gemMaker.createGem, function(gem1, gem2) return gem1.color == gem2.color end) 
 
 end
 
-function gm.tick(comand)
+function gameModel.tick(comand)
 
-    if status == "wait" then
-
-        if comand == "mix" then mtrx.mix(area, gf.createGem, function(gem1, gem2) return gem1.color == gem2.color end) end
-        if comand == "q" then status = "end" end
-
-        if sc.moveisCorrect(comand) then 
-
-            gm.move(comand)
-            
-            if mi.lines3Exist(area, function(gem1, gem2) return gem1.color == gem2.color end) then
-
-                status = "running"
-                
-            else
-
-                gm.move(comand)
-
-            end            
-
-        end
-
-    end
-
-    if status == "running" then 
         
-        if mi.search(area, gf.isEmpty) then
+    if matrixInfo.search(board, gemMaker.isEmpty) then
 
-            mtrx.falling(area, gf.isEmpty, gf.createGem)
+        matrix.falling(board, gemMaker.isEmpty, gemMaker.createGem)
 
-        elseif mi.lines3Exist(area, function(gem1, gem2) return gem1.color == gem2.color end) then
+    elseif matrixInfo.lines3Exist(board, function(gem1, gem2) return gem1.color == gem2.color end) then
 
-            mtrx.convert(area, actionsBefore)
-            area = mtrx.convert3lines(area, gf.convertToEmpty, function(gem1, gem2) return gem1.color == gem2.color end)
-            mtrx.convert(area, actionsAfter)
+        matrix.convert(board, actionsBefore)
+        board = matrix.convert3lines(board, gemMaker.convertToEmpty, function(gem1, gem2) return gem1.color == gem2.color end)
+        matrix.convert(board, actionsAfter)
             
-        else
-            status = "wait"
-        end
-        
-        sleep(timeout)
-
+    else
+        running = false
     end
+
     
 end
 
-function gm.move(comand) 
+function gameModel.mix()
+    matrix.mix(board, gemMaker.createGem, function(gem1, gem2) return gem1.color == gem2.color end) 
+end
 
-    allowedValues = {[1] = true, [2] = true, [3] = true, [4] = true, [5] = true, [6] = true, [7] = true, [8] = true, [9] = true, [10] = true,}
-    
-    r1 = tonumber(string.sub(comand, 2, 2)) + 1 
-    c1 = tonumber(string.sub(comand, 3, 3)) + 1
+function gameModel.move(from, to) 
 
-    direction = string.sub(comand, 4, 4)
-    r2 = direction == "u" and r1 - 1 or (direction == "d" and r1 + 1 or r1)
-    c2 = direction == "l" and c1 - 1 or (direction == "r" and c1 + 1 or c1) 
-
-    if (allowedValues[r2]) and (allowedValues[c2]) then
-        mtrx.swap(area, r1, c1, r2, c2)
+    matrix.swap(board, from, to)
+    if matrixInfo.lines3Exist(board, function(gem1, gem2) return gem1.color == gem2.color end) then 
+        running = true
+    else 
+        matrix.swap(board, from, to)
     end
 
 end
 
-function gm.dump()
-    return copyist.deepCopy(area)
+function gameModel.dump()
+    return copyist.deepCopy(board)
 end
 
-function gm.getStatus()
-    return status
+function gameModel.isRunning()
+    return running
 end
 
-return gm
+return gameModel

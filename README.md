@@ -1,2 +1,3 @@
-# lua-game
-3 math - test task
+# lua-match 3
+main.lua можно считать "точкой входа"
+

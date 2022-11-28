@@ -1,10 +1,9 @@
-local mi = require("lua.lib.matrixInfo")
+local matrixInfo = require("lua.lib.matrixInfo")
 local copyist = require("lua.lib.copyist")
 
-local mtrx = {}
+local matrix = {}
 
-
-function mtrx.createMatrix(rows, collums, generator)
+function matrix.createMatrix(rows, collums, generator)
 
     local matrix = {}
     for r = 1, rows, 1 do
@@ -19,7 +18,7 @@ function mtrx.createMatrix(rows, collums, generator)
     return matrix
 end
 
-function mtrx.mix(matrix, generator, binaryPredicate)
+function matrix.mix(matrix, generator, binaryPredicate)
 
     repeat
 
@@ -31,15 +30,15 @@ function mtrx.mix(matrix, generator, binaryPredicate)
     
         end
 
-    until not mi.lines3Exist(matrix, binaryPredicate)
+    until not matrixInfo.lines3Exist(matrix, binaryPredicate)
 
 end
 
-function mtrx.swap(matrix, r1, c1, r2, c2)
-    matrix[r1][c1], matrix[r2][c2] = matrix[r2][c2], matrix[r1][c1]
+function matrix.swap(matrix, from, to)
+    matrix[from.row][from.col], matrix[to.row][to.col] = matrix[to.row][to.col], matrix[from.row][from.col]
 end
 
-function mtrx.convert3lines(matrix, convert, binaryPredicate) 
+function matrix.convert3lines(matrix, convert, binaryPredicate) 
     
     local virtualmatrix = copyist.deepCopy(matrix)
 
@@ -75,7 +74,7 @@ function mtrx.convert3lines(matrix, convert, binaryPredicate)
 
 end
 
-function mtrx.convert(matrix, converters)
+function matrix.convert(matrix, converters)
     
     for i = 1, #converters, 1 do 
 
@@ -92,7 +91,7 @@ function mtrx.convert(matrix, converters)
 
 end
 
-function mtrx.falling(matrix, predicate, generator)    
+function matrix.falling(matrix, predicate, generator)    
 
     for c = #matrix[1], 1, -1 do
         
@@ -114,4 +113,4 @@ function mtrx.falling(matrix, predicate, generator)
 
 end
 
-return mtrx
+return matrix

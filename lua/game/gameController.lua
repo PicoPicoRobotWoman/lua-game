@@ -1,35 +1,34 @@
-local gm = require("lua.game.gameModel")
-local gi = require("lua.game.gameInput")
-local gr = require("lua.game.gameRender")
+local gameModel = require("lua.game.gameModel")
+local gameInit = require("lua.game.gameInput")
+local gameRender = require("lua.game.gameRender")
 
-local gc = {}
+local gameController = {}
 
-function gc.start()
+function gameController.start()
     
-    gm.init()
-    area = gm.dump()
-    gr.render(area)
+    gameModel.init()
+    local area = gameModel.dump()
+    gameRender.render(area)
 
+    while gameModel.getStatus() ~= "end" do
 
-    while gm.getStatus() ~= "end" do
+        if gameModel.getStatus() == "wait" then
 
-        if gm.getStatus() == "wait" then
-
-            local comand = gi.input()
-            gm.tick(comand)
+            local comand = gameInit.input()
+            gameModel.tick(comand)
 
         else 
 
-            gm.tick()
+            gameModel.tick()
 
         end
 
-        area = gm.dump()
-        gr.render(area)
+        area = gameModel.dump()
+        gameRender.render(area)
                 
     end
-    gr.endGame()
+    gameRender.endGame()
 
 end
 
-return gc
+return gameController
